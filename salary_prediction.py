@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import joblib
 
+model = joblib.load("model.pkl")
+feature_columns = joblib.load("feature_columns.pkl")
+
 st.set_page_config(
     page_title="Salary Prediction App",
     layout="centered"
@@ -50,34 +53,24 @@ with col2:
     Department = st.selectbox("Department", ["Finance", "HR", "IT", "Marketing", "Sales"])
     EducationLevel = st.selectbox("EducationLevel", ["SSCE", "Bachelors", "Masters", "PhD"])
 
-if st.button("Predict Salary"):
-
-   input_data = pd.DataFrame ({
-       "Age": [Age],
-       "YearsExperience": [YearsExperience],
-       "YearsAtCompany": [YearsAtCompany],
-       "PerformanceRating": [PerformanceRating],
-       "MonthlyHoursWorked": [MonthlyHoursWorked],
-       
-       "Department_Finance": [0],
-       "Department_HR": [0],
-       "Department_Marketing": [0],
-       "Department_Operations": [0],
-       "Department_Sales": [0],
-       
-       "EducationLevel_Masters": [0],
-       "EducationLevel_PhD": [0],
-       "EducationLevel_SSCE": [0],
-   })
-   
-   input_data[f"Department_{Department}"] = 1
-       
-   if EducationLevel != "Bachelors":
-           input_data[f"EducationLevel_{EducationLevel}"] = 1
-   
-   prediction = model.predict(input_data)
-
-   st.success(f"Predicted Monthly Salary: ₦{float(prediction[0]):,.2f}")
+user_input_dict = {
+    "Age": Age,
+    "YearsExperience": YearsExperience,
+    "YearsAtCompany": YearsAtCompany,
+    "PerformanceRating": PerformanceRating,
+    "MonthlyHoursWorked": MonthlyHoursWorked,
+    "Department":  Department,
+    "EducationLevel": EducationLevel
+}
     
-   st.divider()
-   st.caption("Built by Oluwatosin | Machine Learning Salary Prediction Project")
+input_data = pd.DataFrame([user_input_dict])
+input_data = pd.get_dummies(input_data)
+input_data = input_data.reindex(columns=feature_columns, fill_value=0)
+if st.button("predict salary"):
+    prediction = model.predict(input_data)[0]
+    predicted_salary = max(0, float(prediction))
+    st.success(f"Predicted Monthly Salary: ₦{predicted_salary:,.2f}")   
+st.divider()
+st.caption("Built by Oluwatosin | Machine Learning Salary Prediction Project")
+   
+   
