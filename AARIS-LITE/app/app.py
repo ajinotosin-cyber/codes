@@ -158,9 +158,12 @@ if os.path.exists("aaris_banner.png"):
 
 # ------------------------------
 
-reg_model = pickle.load(open("regression_model.pkl", "rb"))
+BASE_DIR = os.path.dirname(__file__)
+regression_path = os.path.join(BASE_DIR, "regression_model.pkl")
+classifier_path = os.path.join(BASE_DIR, "classifier_model.pkl")
 
-clf_model = pickle.load(open("classifier_model.pkl", "rb"))
+reg_model = pickle.load(open(regression_path, "rb"))
+clf_model = pickle.load(open(classifier_path, "rb"))
 
 
 
