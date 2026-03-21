@@ -4,7 +4,7 @@ AI Academic Records & Intelligence System
 
 https://jwrcpt2u3ipgbhw2tza8he.streamlit.app/
 
-Capstone Project – Intelligent Academic Analytics Platform for African Universities.
+An Intelligent Academic Analytics Platform for African Universities.
 
 Project Overview
 
